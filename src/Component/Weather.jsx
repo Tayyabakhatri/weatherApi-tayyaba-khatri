@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 function Weather() {
+  let userCityRef = useRef(null);
+  let [data, setData] = useState(null);
+
+  const getCityName = async () => {
+    let cityName = userCityRef.current.value;
+
+    let APIkey = "8609ff3b0e5801e5636c55836b57d5bf";
+    try {
+      const weatherAPI = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIkey}&units=metric`
+      );
+      let weatherData = weatherAPI.data;
+      console.log(weatherData);
+
+      setData(weatherData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    if(data){
+       
+      console.log(data);
+    }
+  }, [data]);
+
   return (
     <>
       <section
@@ -27,11 +54,13 @@ function Weather() {
                   placeholder="City"
                   aria-label="Search"
                   aria-describedby="search-addon"
+                  ref={userCityRef}
                 />
                 <a href="#!" type="button">
                   <span
                     className="input-group-text border-0 fw-bold"
                     id="search-addon"
+                    onClick={getCityName}
                   >
                     Check!
                   </span>
@@ -67,28 +96,39 @@ function Weather() {
                 </div>
               </div>
 
-              <div className="card shadow-0 border">
-                <div className="card-body p-4">
-                  <h4 className="mb-1 sfw-normal">New York, US</h4>
-                  <p className="mb-2">
-                    Current temperature: <strong>5.42°C</strong>
-                  </p>
-                  <p>
-                    Feels like: <strong>4.37°C</strong>
-                  </p>
-                  <p>
-                    Max: <strong>6.11°C</strong>, Min: <strong>3.89°C</strong>
-                  </p>
+              {data && (
+                <div className="card shadow-0 border">
+                  <div className="card-body p-4">
+                    <h4 className="mb-1 sfw-normal">{data?.name}</h4>
+                    <p className="mb-2">
+                      Current temperature: <strong>{data?.main?.temp}°C</strong>
+                    </p>
+                    <p>
+                      Feels like: <strong>{data?.main?.feels_like}°C</strong>
+                    </p>
+                    <p>
+                      Max: <strong>{data?.main?.temp_max}°C</strong>, Min: <strong>{data?.main?.temp_min}°C</strong>
+                    </p>
+                    <p>
+                      Humidity: <strong>{data?.main?.humidity}</strong>
+                    </p>
+                    <p>
+                      sea Level: <strong>{data?.main?.sea_level}</strong>
+                    </p>
+                    <p>
+                      Wind speed: <strong>{data?.wind?.speed}</strong>
+                    </p>
 
-                  <div className="d-flex flex-row align-items-center">
-                    <p className="mb-0 me-4">Scattered Clouds</p>
-                    <i
-                      className="fas fa-cloud fa-3x"
-                      style={{ color: "#eee" }}
-                    ></i>
+                    <div className="d-flex flex-row align-items-center">
+                      <p className="mb-0 me-4">Scattered Clouds</p>
+                      <i
+                        className="fas fa-cloud fa-3x"
+                        style={{ color: "#eee" }}
+                      ></i>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
