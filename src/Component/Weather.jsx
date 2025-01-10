@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import './weather.css'
 
 function Weather() {
   let userCityRef = useRef(null);
   let [data, setData] = useState(null);
+  let [altitude, setAltitude] = useState(null);
+  let [icon, setIcon] = useState(null);
 
   const getCityName = async () => {
     let cityName = userCityRef.current.value;
@@ -17,13 +20,20 @@ function Weather() {
       console.log(weatherData);
 
       setData(weatherData);
+      let seaLevelPressure = weatherData?.main?.sea_level;
+      let icon = weatherData?.Weather?.[0].icon;
+      setIcon(icon);
+
+      if (seaLevelPressure) {
+        const altitude = 44330 * (1 - (seaLevelPressure / 1013.25) ** 0.1903);
+        setAltitude(altitude.toFixed(2)); // Keeping two decimal places
+      }
     } catch (e) {
       console.log(e);
     }
   };
   useEffect(() => {
-    if(data){
-       
+    if (data) {
       console.log(data);
     }
   }, [data]);
@@ -33,8 +43,8 @@ function Weather() {
       <section
         className="vh-100"
         style={{
-          backgroundImage:
-            "url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp)",
+          background:'./src/assets/QlQV.gif',
+            // "url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -43,9 +53,9 @@ function Weather() {
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-md-8 col-lg-6 col-xl-4">
-              <h3 className="mb-4 pb-2 fw-normal">
+              <h2 className="mb-4 pb-2 fw-bold tracking-in-expand">
                 Check the weather forecast
-              </h3>
+              </h2>
 
               <div className="input-group rounded mb-3">
                 <input
@@ -67,7 +77,7 @@ function Weather() {
                 </a>
               </div>
 
-              <div className="mb-4 pb-2">
+              {/* <div className="mb-4 pb-2">
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
@@ -94,10 +104,10 @@ function Weather() {
                     Farenheit
                   </label>
                 </div>
-              </div>
+              </div> */}
 
               {data && (
-                <div className="card shadow-0 border">
+                <div className="card shadow-0 border fade-in-left">
                   <div className="card-body p-4">
                     <h4 className="mb-1 sfw-normal">{data?.name}</h4>
                     <p className="mb-2">
@@ -107,20 +117,21 @@ function Weather() {
                       Feels like: <strong>{data?.main?.feels_like}°C</strong>
                     </p>
                     <p>
-                      Max: <strong>{data?.main?.temp_max}°C</strong>, Min: <strong>{data?.main?.temp_min}°C</strong>
+                      Max: <strong>{data?.main?.temp_max}°C</strong>, Min:{" "}
+                      <strong>{data?.main?.temp_min}°C</strong>
                     </p>
                     <p>
                       Humidity: <strong>{data?.main?.humidity}</strong>
                     </p>
                     <p>
-                      sea Level: <strong>{data?.main?.sea_level}</strong>
+                      sea Level: <strong>{altitude}</strong>
                     </p>
                     <p>
                       Wind speed: <strong>{data?.wind?.speed}</strong>
                     </p>
+                    <img src={`http://openweathermap.org/img/w/${icon}.png`} />
 
                     <div className="d-flex flex-row align-items-center">
-                      <p className="mb-0 me-4">Scattered Clouds</p>
                       <i
                         className="fas fa-cloud fa-3x"
                         style={{ color: "#eee" }}
