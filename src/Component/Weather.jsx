@@ -113,7 +113,7 @@ function Weather() {
                     id="search-addon"
                     onClick={getCityName}
                   >
-                    Check!
+                    search
                   </span>
                 </a>
               </div>
