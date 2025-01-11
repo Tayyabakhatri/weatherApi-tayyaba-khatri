@@ -1,12 +1,44 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import './weather.css'
+import "./weather.css";
+import { AiOutlineSound } from "react-icons/ai";
 
 function Weather() {
   let userCityRef = useRef(null);
   let [data, setData] = useState(null);
   let [altitude, setAltitude] = useState(null);
   let [icon, setIcon] = useState(null);
+  let ref = useRef(null);
+  let [celcius, setCelcius] = useState("");
+  let [fahranhiet, setFahrenhiet] = useState("");
+
+  // audio function
+  let audioRef = useRef(null);
+  let [isPlay, setIsPlay] = useState(true);
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.5;
+    }
+  }, []);
+  const playPause = () => {
+    if (audioRef.current) {
+      if (isPlay) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlay(!isPlay)
+    }
+  };
+
+  function text() {
+    useEffect(() => {
+      // Element ko reference ke zariye access karein
+      if (ref.current) {
+        elementRef.current.classList.add("text-focus-in"); // Example: Color change
+      }
+    }, []);
+  }
 
   const getCityName = async () => {
     let cityName = userCityRef.current.value;
@@ -23,37 +55,46 @@ function Weather() {
       let seaLevelPressure = weatherData?.main?.sea_level;
       let icon = weatherData?.Weather?.[0].icon;
       setIcon(icon);
-
+      // sea level pressure
       if (seaLevelPressure) {
         const altitude = 44330 * (1 - (seaLevelPressure / 1013.25) ** 0.1903);
         setAltitude(altitude.toFixed(2)); // Keeping two decimal places
       }
+      text();
     } catch (e) {
       console.log(e);
     }
   };
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-  }, [data]);
-
+  function Fahranhiet(celsius) {
+    const fahrenheitValue = (celsius * 9) / 5 + 32;
+    setFahrenheit(fahrenheitValue.toFixed(2));
+  }
   return (
     <>
       <section
         className="vh-100"
         style={{
-          background:'./src/assets/QlQV.gif',
-            // "url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp)",
+          background: "url(./src/assets/SFFd.gif)",
+          // "url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
+        <i className="fa-solid fa-volume-low" style={{color: "#fafcff"}}></i>
+        <audio ref={audioRef} autoPlay loop>
+          <source
+            src="./src/assets/mixkit-bad-weather-heavy-rain-and-thunder-1261.wav"
+            type="audio/wav"
+          />
+        </audio>
+         <button onClick={playPause}>
+          {isPlay ? 'Pause' : 'Play'}
+        </button>
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-md-8 col-lg-6 col-xl-4">
-              <h2 className="mb-4 pb-2 fw-bold tracking-in-expand">
+              <h2 className="mb-4 pb-2 fw-bold tracking-in-expand text-success">
                 Check the weather forecast
               </h2>
 
@@ -77,57 +118,71 @@ function Weather() {
                 </a>
               </div>
 
-              {/* <div className="mb-4 pb-2">
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio1"
-                    value="option1"
-                    checked
-                  />
-                  <label className="form-check-label" htmlFor="inlineRadio1">
-                    Celsius
-                  </label>
-                </div>
-
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="inlineRadioOptions"
-                    id="inlineRadio2"
-                    value="option2"
-                  />
-                  <label className="form-check-label" htmlFor="inlineRadio2">
-                    Farenheit
-                  </label>
-                </div>
-              </div> */}
-
               {data && (
-                <div className="card shadow-0 border fade-in-left">
+                <div
+                  className="card shadow-0  fade-in-left "
+                  style={{ backgroundColor: "gray" }}
+                >
+                  <div className="my-4 px-4">
+                    <div className="form-check form-check-inline">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineRadio1"
+                        value="option1"
+                        checked
+                      />
+                      <label
+                        className="form-check-label text-dark"
+                        htmlFor="inlineRadio1"
+                      >
+                        Celsius
+                      </label>
+                    </div>
+
+                    <div className="form-check form-check-inline">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="inlineRadioOptions"
+                        id="inlineRadio2"
+                        value="option2"
+                      />
+                      <label
+                        className="form-check-label text-dark"
+                        htmlFor="inlineRadio2"
+                        onClick={Fahranhiet}
+                      >
+                        Farenheit
+                      </label>
+                    </div>
+                  </div>
                   <div className="card-body p-4">
-                    <h4 className="mb-1 sfw-normal">{data?.name}</h4>
-                    <p className="mb-2">
-                      Current temperature: <strong>{data?.main?.temp}°C</strong>
+                    <h4 className="mb-1 sfw-normal text-focus-in">
+                      {data?.name}
+                    </h4>
+                    <p className="mb-2 ">
+                      Current temperature:{" "}
+                      <strong ref={ref}>{data?.main?.temp}°C</strong>
                     </p>
                     <p>
-                      Feels like: <strong>{data?.main?.feels_like}°C</strong>
+                      Feels like:{" "}
+                      <strong ref={ref}>{data?.main?.feels_like}°C</strong>
                     </p>
                     <p>
-                      Max: <strong>{data?.main?.temp_max}°C</strong>, Min:{" "}
-                      <strong>{data?.main?.temp_min}°C</strong>
+                      Max: <strong ref={ref}>{data?.main?.temp_max}°C</strong>,
+                      Min: <strong ref={ref}>{data?.main?.temp_min}°C</strong>
                     </p>
                     <p>
-                      Humidity: <strong>{data?.main?.humidity}</strong>
+                      Humidity:{" "}
+                      <strong ref={ref}>{data?.main?.humidity}</strong>
                     </p>
                     <p>
-                      sea Level: <strong>{altitude}</strong>
+                      sea Level: <strong ref={ref}>{altitude}</strong>
                     </p>
                     <p>
-                      Wind speed: <strong>{data?.wind?.speed}</strong>
+                      Wind speed: <strong ref={ref}>{data?.wind?.speed}</strong>
                     </p>
                     <img src={`http://openweathermap.org/img/w/${icon}.png`} />
 
