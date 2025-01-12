@@ -1,7 +1,28 @@
-.sec {
-    background-color: #f5f6f7;
+body{
+    overflow-y: hidden;
 }
-
+h1 {
+    font-size: 72px;
+    background: -webkit-linear-gradient(#c68feb, #f0edf5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media screen and (max-width:768px)and (min-width:600px) {
+    h1{
+        font-size: 53px;
+    }
+  }
+  @media screen and (max-width:600px) {
+    h1{
+        font-size: 35px;
+    }
+  }
+  #card{
+    font-size: 30px;
+    background: -webkit-linear-gradient(#c5e2ee, #edecee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 /* animista animations  */
 .tracking-in-expand {
     -webkit-animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
