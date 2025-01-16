@@ -9,7 +9,7 @@ function Weather() {
   let [altitude, setAltitude] = useState(null);
   let [icon, setIcon] = useState(null);
   let ref = useRef(null);
-  let [celcius, setCelcius] = useState("");
+  
   let [fahranhiet, setFahrenhiet] = useState("");
   let [error, setError] = useState(null);
 console.log(icon);
@@ -172,7 +172,7 @@ console.log(icon);
                   </label>
                 </div>
 
-                <div className="form-check form-check-inline">
+                {/* <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -183,11 +183,11 @@ console.log(icon);
                   <label
                     className="form-check-label text-dark"
                     htmlFor="inlineRadio2"
-                    onClick={Fahranhiet}
+                   
                   >
                     Farenheit
                   </label>
-                </div>
+                </div> */}
               </div>
               <div className="card-body p-4" style={{fontSize:'20px', fontWeight:''}}>
                 <h1 className="mb-1 sfw-normal text-focus-in" id="h1">{data?.name}</h1>
