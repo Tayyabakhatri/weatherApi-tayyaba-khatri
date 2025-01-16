@@ -88,7 +88,7 @@ console.log(icon);
       <section
         className="vh-100"
         style={{
-          background: "url(./src/assets/SFFd.gif)",
+          background: "url(public/SFFd.gif)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
