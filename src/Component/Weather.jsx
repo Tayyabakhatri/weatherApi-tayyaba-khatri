@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./weather.css";
-import { AiOutlineSound } from "react-icons/ai";
+// import { AiOutlineSound } from "react-icons/ai";
 
 function Weather() {
   let userCityRef = useRef(null);
@@ -60,18 +60,20 @@ console.log(icon);
       setData(weatherData);
       let seaLevelPressure = weatherData?.main?.sea_level;
       let icon = weatherData?.Weather?.[0].icon;
-      return setIcon(icon);
       // sea level pressure
       if (seaLevelPressure) {
         const altitude = 44330 * (1 - (seaLevelPressure / 1013.25) ** 0.1903);
         setAltitude(altitude.toFixed(2)); // Keeping two decimal places
       }
       text();
+      return setIcon(icon);
     } catch (e) {
-      let err = e.message;
+      
+      
+      let err = e.code;
+      console.log(err);
      return setError(err);
-      // errorRendering();
-      // console.log(error);
+     
     }
   };
   console.log(error);
@@ -137,14 +139,14 @@ console.log(icon);
             </a>
           </div>
 
-          {/* {error && (
+          {error && (
             <div
               className="text-white text-center"
               style={{ fontSize: "40px" }}
             >
               {error}
             </div>
-          )} */}
+          )}
 
           {/* <div className="row d-flex justify-content-center align-items-center "> */}
             {data && (
