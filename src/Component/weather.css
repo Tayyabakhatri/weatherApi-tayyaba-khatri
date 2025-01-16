@@ -1,6 +1,14 @@
 body{
     overflow-y: hidden;
 }
+/* hi{
+    color: #8fa8d3c4;
+} */
+#h1{
+    background: -webkit-linear-gradient(#c5832b, #d5c6ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 h1 {
     font-size: 72px;
     background: -webkit-linear-gradient(#c68feb, #f0edf5);

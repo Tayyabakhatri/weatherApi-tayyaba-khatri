@@ -11,15 +11,8 @@ function Weather() {
   let ref = useRef(null);
   let [celcius, setCelcius] = useState("");
   let [fahranhiet, setFahrenhiet] = useState("");
-  let [error, setError] = useState("");
-
-
-  // function errorRendering() {
-  //   <div>
-  //     <p>{error}</p>
-  //   </div>;
-  // }
-
+  let [error, setError] = useState(null);
+console.log(icon);
 
   // audio function
   let audioRef = useRef(null);
@@ -67,7 +60,7 @@ function Weather() {
       setData(weatherData);
       let seaLevelPressure = weatherData?.main?.sea_level;
       let icon = weatherData?.Weather?.[0].icon;
-      setIcon(icon);
+      return setIcon(icon);
       // sea level pressure
       if (seaLevelPressure) {
         const altitude = 44330 * (1 - (seaLevelPressure / 1013.25) ** 0.1903);
@@ -75,13 +68,14 @@ function Weather() {
       }
       text();
     } catch (e) {
-      let error = e.message;
-      setError(error);
-      errorRendering();
-      console.log(error);
+      let err = e.message;
+     return setError(err);
+      // errorRendering();
+      // console.log(error);
     }
   };
- 
+  console.log(error);
+  
 
   function Fahranhiet(celsius) {
     const fahrenheitValue = (celsius * 9) / 5 + 32;
@@ -143,17 +137,22 @@ function Weather() {
             </a>
           </div>
 
-          {error&&(
-            <div className="text-white text-center" style={{fontSize:"40px"}}>{error}</div>
-          )}
+          {/* {error && (
+            <div
+              className="text-white text-center"
+              style={{ fontSize: "40px" }}
+            >
+              {error}
+            </div>
+          )} */}
 
           {/* <div className="row d-flex justify-content-center align-items-center "> */}
-          {data && (
+            {data && (
             <div
               className="card shadow-0 mt-5  fade-in-left "
-              style={{ backgroundColor: "url(./src/assets/QlQV.gif" }}
+              style={{ backgroundColor:'#8fa8d3c4'}}
             >
-              <div className="my-4 px-4">
+              <div className="my-4 px-4 " >
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
@@ -188,8 +187,8 @@ function Weather() {
                   </label>
                 </div>
               </div>
-              <div className="card-body p-4">
-                <h4 className="mb-1 sfw-normal text-focus-in">{data?.name}</h4>
+              <div className="card-body p-4" style={{fontSize:'20px', fontWeight:''}}>
+                <h1 className="mb-1 sfw-normal text-focus-in" id="h1">{data?.name}</h1>
                 <p className="mb-2 ">
                   Current temperature:{" "}
                   <strong ref={ref}>{data?.main?.temp}°C</strong>
@@ -213,53 +212,17 @@ function Weather() {
                 </p>
                 <img src={`http://openweathermap.org/img/w/${icon}.png`} />
 
-                <div className="d-flex flex-row align-items-center">
+                {/* <div className="d-flex flex-row align-items-center">
                   <i
                     className="fas fa-cloud fa-3x"
                     style={{ color: "#eee" }}
                   ></i>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
         </div>
-        {/* </div> */}
       </section>
-
-      {/* <div>
-        <section className="vh-100 sec" style={{backgroundColor:'white'}}>
-          <div className="container py-5 h-100">
-            <div className="row d-flex justify-content-center align-items-center h-100">
-              <div className="col-md-10 col-lg-8 col-xl-6">
-                <div
-                  className="card bg-dark text-white"
-                  style={{borderRadius: '40px'}}
-                >
-                  <div className="bg-image" style={{borderRadius:' 35px'}}>
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-weather/draw1.webp"
-                      className="card-img"
-                      alt="weather"
-                    />
-                    <div
-                      className="mask"
-                      style={{backgroundColor: 'rgba(190, 216, 232, .5)'}}
-                    ></div>
-                  </div>
-                  <div className="card-img-overlay text-dark p-5">
-                    <h4 className="mb-0">Juneau, Alaska, US</h4>
-                    <p className="display-2 my-3">1.28°C</p>
-                    <p className="mb-2">
-                      Feels Like: <strong>-1.08 °C</strong>
-                    </p>
-                    <h5>Snowy</h5>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div> */}
     </>
   );
 }
