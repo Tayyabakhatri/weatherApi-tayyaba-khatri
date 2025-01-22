@@ -9,7 +9,6 @@ function Weather() {
   let [altitude, setAltitude] = useState(null);
   let [icon, setIcon] = useState(null);
   let ref = useRef(null);
-  
   let [fahranhiet, setFahrenhiet] = useState("");
   let [error, setError] = useState(null);
 console.log(icon);
@@ -119,6 +118,7 @@ console.log(icon);
             </h1>
           </div>
           <div className="input-group rounded mb-3 gap-5">
+          
             <input
               type="search"
               className="form-control rounded "
